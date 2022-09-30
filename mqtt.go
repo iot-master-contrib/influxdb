@@ -3,10 +3,8 @@ package main
 import (
 	"encoding/json"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	"github.com/influxdata/influxdb-client-go/api/write"
 	"log"
 	"strings"
-	"time"
 )
 
 func OpenMQTT() error {
@@ -14,10 +12,10 @@ func OpenMQTT() error {
 	//物联大师 主连接
 	opts := mqtt.NewClientOptions()
 
-	opts.AddBroker(config.Broker)
-	opts.SetClientID(config.ClientId)
-	opts.SetUsername(config.Username)
-	opts.SetPassword(config.Password)
+	opts.AddBroker(config.MQTT.Broker)
+	opts.SetClientID(config.MQTT.ClientId)
+	opts.SetUsername(config.MQTT.Username)
+	opts.SetPassword(config.MQTT.Password)
 
 	client := mqtt.NewClient(opts)
 	token := client.Connect()
@@ -36,7 +34,8 @@ func OpenMQTT() error {
 		id := strings.Split(message.Topic(), "/")[2]
 		var values map[string]interface{}
 		_ = json.Unmarshal(message.Payload(), &values)
-		writeApi.WritePoint(write.NewPoint("wattmeter", map[string]string{"id": id}, values, time.Now()))
+		//writeApi.WritePoint(write.NewPoint("wattmeter", map[string]string{"id": id}, values, time.Now()))
+		Insert(id, values)
 	})
 
 	return nil

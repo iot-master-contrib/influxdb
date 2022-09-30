@@ -49,7 +49,7 @@ func OpenWeb() {
 
 	log.Println("Web服务启动", config.Web)
 	server := &http.Server{
-		Addr:    config.Web,
+		Addr:    config.Web.Addr,
 		Handler: app,
 	}
 

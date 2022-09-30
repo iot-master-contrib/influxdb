@@ -4,6 +4,7 @@ import (
 	"context"
 	influxdb2 "github.com/influxdata/influxdb-client-go"
 	"github.com/influxdata/influxdb-client-go/api"
+	"github.com/influxdata/influxdb-client-go/api/write"
 	"time"
 )
 
@@ -16,16 +17,13 @@ type Point struct {
 }
 
 func OpenInfluxdb() {
-	org := "zgwit"
-	bucket := "zgwit"
-	token := "K79bHLvUj0aXqqJH-QBnI-pPl_ZGKWbT6f5Jx1Ol1ZEY1LTJJUwt_aiWJ5vxUc1PcngV7BmlwkJ6ckqkQv5x2g=="
-	//measurement := "data_up"
+	client := influxdb2.NewClient(config.Influxdb.Url, config.Influxdb.Token)
+	writeApi = client.WriteAPI(config.Influxdb.Org, config.Influxdb.Bucket)
+	queryApi = client.QueryAPI(config.Influxdb.Org)
+}
 
-	client := influxdb2.NewClient("http://git.zgwit.com:8086", token)
-	//defer client.Close()
-
-	writeApi = client.WriteAPI(org, bucket)
-	queryApi = client.QueryAPI(org)
+func Insert(id string, values map[string]interface{}) {
+	writeApi.WritePoint(write.NewPoint(config.Influxdb.Measurement, map[string]string{"id": id}, values, time.Now()))
 }
 
 func Query(id, field, start, end, window, fn string) ([]Point, error) {
