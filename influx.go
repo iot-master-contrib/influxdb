@@ -28,7 +28,7 @@ func OpenInfluxdb() {
 	queryApi = client.QueryAPI(org)
 }
 
-func Query(id string, field string, start, end, window string) ([]Point, error) {
+func Query(id, field, start, end, window, fn string) ([]Point, error) {
 	//metric := fmt.Sprintf("%d", id)
 	bucket := "zgwit"
 
@@ -36,8 +36,8 @@ func Query(id string, field string, start, end, window string) ([]Point, error) 
 	flux += "|> range(start: " + start + ", stop: " + end + ")\n"
 	flux += "|> filter(fn: (r) => r[\"id\"] == \"" + id + "\")\n"
 	flux += "|> filter(fn: (r) => r[\"_field\"] == \"" + field + "\")"
-	flux += "|> aggregateWindow(every: " + window + ", fn: mean, createEmpty: false)\n"
-	flux += "|> yield(name: \"mean\")"
+	flux += "|> aggregateWindow(every: " + window + ", fn: " + fn + ", createEmpty: false)\n"
+	flux += "|> yield(name: \"" + fn + "\")"
 
 	result, err := queryApi.Query(context.Background(), flux)
 	if err != nil {

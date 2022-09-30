@@ -36,8 +36,9 @@ func OpenWeb() {
 		start := ctx.DefaultQuery("start", "-5h")
 		end := ctx.DefaultQuery("end", "0h")
 		window := ctx.DefaultQuery("window", "10m")
+		fn := ctx.DefaultQuery("fn", "mean") //last
 
-		values, err := Query(id, key, start, end, window)
+		values, err := Query(id, key, start, end, window, fn)
 		if err != nil {
 			replyError(ctx, err)
 			return
