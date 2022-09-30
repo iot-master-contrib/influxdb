@@ -30,7 +30,7 @@ func OpenWeb() {
 
 	app.Use(gin.Logger())
 
-	app.GET("/device/:id/:name", func(ctx *gin.Context) {
+	app.GET("/service/history/device/:id/:name", func(ctx *gin.Context) {
 		id := ctx.Param("id")
 		key := ctx.Param("name")
 		start := ctx.DefaultQuery("start", "-5h")
