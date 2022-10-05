@@ -1,14 +1,17 @@
 package main
 
-import "log"
+import (
+	"iot-master-influxdb/internal"
+	"log"
+)
 
 func main() {
-	err := OpenMQTT()
+	err := internal.OpenMQTT()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	OpenInfluxdb()
+	internal.OpenInfluxdb()
 
-	OpenWeb()
+	internal.OpenWeb()
 }
