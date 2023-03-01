@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"github.com/zgwit/iot-master/v3/model"
 	"gopkg.in/yaml.v2"
 	"log"
 	"os"
@@ -12,12 +13,29 @@ var config = Config{
 	Web: Web{
 		Addr: ":8088",
 	},
+	MQTT: MQTT{
+		Type:     "unix",
+		Url:      "iot-master.sock",
+		ClientId: "",
+		Username: "",
+		Password: "",
+	},
+	Apps: []model.App{
+		{
+			Id:   "$influx",
+			Name: "Influxdb",
+		},
+		{
+			Id: "$history",
+		},
+	},
 }
 
 type Config struct {
-	Web      Web      `yaml:"web"`
-	MQTT     MQTT     `yaml:"mqtt"`
-	Influxdb Influxdb `yaml:"influxdb"`
+	Web      Web         `yaml:"web"`
+	MQTT     MQTT        `yaml:"mqtt"`
+	Influxdb Influxdb    `yaml:"influxdb"`
+	Apps     []model.App `yaml:"apps"`
 }
 
 type Web struct {
@@ -25,7 +43,8 @@ type Web struct {
 }
 
 type MQTT struct {
-	Broker   string `yaml:"broker"`
+	Type     string `yaml:"type"` //tcp, unix
+	Url      string `yaml:"url"`
 	ClientId string `yaml:"client_id"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
@@ -39,7 +58,7 @@ type Influxdb struct {
 	Measurement string `yaml:"measurement"`
 }
 
-func init() {
+func init2() {
 	app, _ := filepath.Abs(os.Args[0])
 	ext := filepath.Ext(os.Args[0])
 	//替换后缀名.exe为.yaml
@@ -55,6 +74,8 @@ func init() {
 func Load(filename string) error {
 	// 如果没有文件，则使用默认信息创建
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		config.MQTT.Type = "unix"
+		config.MQTT.Url = filepath.Join(os.TempDir(), "iot-master.sock")
 		return Store(filename)
 		//return nil
 	} else {

@@ -2,9 +2,9 @@ package internal
 
 import (
 	"context"
-	influxdb2 "github.com/influxdata/influxdb-client-go"
-	"github.com/influxdata/influxdb-client-go/api"
-	"github.com/influxdata/influxdb-client-go/api/write"
+	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
+	"github.com/influxdata/influxdb-client-go/v2/api"
+	"github.com/influxdata/influxdb-client-go/v2/api/write"
 	"time"
 )
 
@@ -22,16 +22,16 @@ func OpenInfluxdb() {
 	queryApi = client.QueryAPI(config.Influxdb.Org)
 }
 
-func Insert(id string, values map[string]interface{}) {
-	writeApi.WritePoint(write.NewPoint(config.Influxdb.Measurement, map[string]string{"id": id}, values, time.Now()))
+func Insert(measurement, id string, fields map[string]interface{}, ts time.Time) {
+	writeApi.WritePoint(write.NewPoint(measurement, map[string]string{"id": id}, fields, ts))
 }
 
-func Query(id, field, start, end, window, fn string) ([]Point, error) {
-	//metric := fmt.Sprintf("%d", id)
-	bucket := "zgwit"
+func Query(measurement, id, field, start, end, window, fn string) ([]Point, error) {
+	bucket := config.Influxdb.Bucket
 
 	flux := "from(bucket: \"" + bucket + "\")\n"
 	flux += "|> range(start: " + start + ", stop: " + end + ")\n"
+	flux += "|> filter(fn: (r) => r[\"_measurement\"] == \"" + measurement + "\")\n"
 	flux += "|> filter(fn: (r) => r[\"id\"] == \"" + id + "\")\n"
 	flux += "|> filter(fn: (r) => r[\"_field\"] == \"" + field + "\")"
 	flux += "|> aggregateWindow(every: " + window + ", fn: " + fn + ", createEmpty: false)\n"

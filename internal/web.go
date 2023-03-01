@@ -30,7 +30,8 @@ func OpenWeb() {
 
 	app.Use(gin.Logger())
 
-	app.GET("/service/history/device/:id/:name", func(ctx *gin.Context) {
+	app.GET("/$history/:pid/:id/:name", func(ctx *gin.Context) {
+		pid := ctx.Param("pid")
 		id := ctx.Param("id")
 		key := ctx.Param("name")
 		start := ctx.DefaultQuery("start", "-5h")
@@ -38,13 +39,13 @@ func OpenWeb() {
 		window := ctx.DefaultQuery("window", "10m")
 		fn := ctx.DefaultQuery("fn", "mean") //last
 
-		values, err := Query(id, key, start, end, window, fn)
+		values, err := Query(pid, id, key, start, end, window, fn)
 		if err != nil {
 			replyError(ctx, err)
 			return
 		}
+
 		replyOk(ctx, values)
-		return
 	})
 
 	log.Println("Web服务启动", config.Web)
