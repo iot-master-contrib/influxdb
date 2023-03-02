@@ -13,19 +13,23 @@ var config = Config{
 		Addr: ":60001",
 	},
 	MQTT: MQTT{
-		Url:      "iot-master.sock", //开发时，改为:1843 方便调试
+		Url:      "unix://iot-master.sock", //开发时，改为:1843 方便调试
 		ClientId: "iot-master-influxdb",
 		Username: "",
 		Password: "",
 	},
 	Apps: []model.App{
 		{
-			Id:   "influx",
-			Name: "Influxdb",
+			Id:      "influx",
+			Name:    "Influxdb",
 			Address: "http://localhost:60001",
+			Entries: []model.AppEntry{
+				{Name: "配置", Path: "/config"},
+			},
 		},
 		{
-			Id: "history",
+			Id:      "history",
+			Hidden:  true,
 			Address: "http://localhost:60001",
 		},
 	},
