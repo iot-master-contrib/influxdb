@@ -23,7 +23,7 @@ func replyError(ctx *gin.Context, err error) {
 }
 
 func OpenWeb() {
-	gin.SetMode(gin.ReleaseMode)
+	//gin.SetMode(gin.ReleaseMode)
 
 	//GIN初始化
 	app := gin.Default()

@@ -10,6 +10,11 @@ import (
 )
 
 func OpenMQTT() error {
+	//调试MQTT
+	//mqtt.ERROR = log.New(os.Stdout, "[ERROR] ", 0)
+	//mqtt.CRITICAL = log.New(os.Stdout, "[CRIT] ", 0)
+	//mqtt.WARN = log.New(os.Stdout, "[WARN]  ", 0)
+	//mqtt.DEBUG = log.New(os.Stdout, "[DEBUG] ", 0)
 
 	//物联大师 主连接
 	opts := mqtt.NewClientOptions()
@@ -19,6 +24,15 @@ func OpenMQTT() error {
 	opts.SetUsername(config.MQTT.Username)
 	opts.SetPassword(config.MQTT.Password)
 
+	opts.SetOnConnectHandler(func(client mqtt.Client) {
+		//注册应用
+		for _, v := range config.Apps {
+			payload, _ := json.Marshal(v)
+			client.Publish("master/register", 0, false, payload)
+		}
+	})
+
+
 	client := mqtt.NewClient(opts)
 	token := client.Connect()
 	token.Wait()
@@ -27,9 +41,6 @@ func OpenMQTT() error {
 		return err
 	}
 
-	//TODO 使用iot-master model.Service
-	payload, _ := json.Marshal(config.Apps)
-	client.Publish("master/register", 0, false, payload)
 
 	//订阅消息
 	client.Subscribe("up/property/+/+", 0, func(client mqtt.Client, message mqtt.Message) {

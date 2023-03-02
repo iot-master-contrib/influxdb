@@ -5,6 +5,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"log"
 	"os"
+	"runtime"
 )
 
 var config = Config{
@@ -19,11 +20,13 @@ var config = Config{
 	},
 	Apps: []model.App{
 		{
-			Id:   "$influx",
+			Id:   "influx",
 			Name: "Influxdb",
+			Address: "http://localhost:60001",
 		},
 		{
-			Id: "$history",
+			Id: "history",
+			Address: "http://localhost:60001",
 		},
 	},
 }
@@ -60,6 +63,9 @@ func Load(filename string) error {
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
 		//config.MQTT.Url = "unix://[" + url.PathEscape(filepath.Join(os.TempDir(), "iot-master.sock")) + "]"
 		//config.MQTT.Url = "unix://" + url.PathEscape(filepath.Join(os.TempDir(), "iot-master.sock"))
+		if runtime.GOOS == "windows" {
+			config.MQTT.Url = ":1843"
+		}
 		return Store(filename)
 		//return nil
 	} else {

@@ -6,7 +6,7 @@ require (
 	github.com/eclipse/paho.mqtt.golang v1.4.2
 	github.com/gin-gonic/gin v1.9.0
 	github.com/influxdata/influxdb-client-go/v2 v2.12.2
-	github.com/zgwit/iot-master/v3 v3.0.0-20230301213646-3606c764bd0d
+	github.com/zgwit/iot-master/v3 v3.0.0-20230302001123-57d12ddd51e3
 	gopkg.in/yaml.v2 v2.4.0
 )
 
