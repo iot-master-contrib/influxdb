@@ -5,18 +5,15 @@ import (
 	"gopkg.in/yaml.v2"
 	"log"
 	"os"
-	"path/filepath"
-	"strings"
 )
 
 var config = Config{
 	Web: Web{
-		Addr: ":8088",
+		Addr: ":60001",
 	},
 	MQTT: MQTT{
-		Type:     "unix",
-		Url:      "iot-master.sock",
-		ClientId: "",
+		Url:      "iot-master.sock", //开发时，改为:1843 方便调试
+		ClientId: "iot-master-influxdb",
 		Username: "",
 		Password: "",
 	},
@@ -43,7 +40,6 @@ type Web struct {
 }
 
 type MQTT struct {
-	Type     string `yaml:"type"` //tcp, unix
 	Url      string `yaml:"url"`
 	ClientId string `yaml:"client_id"`
 	Username string `yaml:"username"`
@@ -58,24 +54,12 @@ type Influxdb struct {
 	Measurement string `yaml:"measurement"`
 }
 
-func init2() {
-	app, _ := filepath.Abs(os.Args[0])
-	ext := filepath.Ext(os.Args[0])
-	//替换后缀名.exe为.yaml
-	cfg := strings.TrimSuffix(app, ext) + ".yaml"
-
-	err := Load(cfg)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 // Load 加载
 func Load(filename string) error {
 	// 如果没有文件，则使用默认信息创建
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		config.MQTT.Type = "unix"
-		config.MQTT.Url = filepath.Join(os.TempDir(), "iot-master.sock")
+		//config.MQTT.Url = "unix://[" + url.PathEscape(filepath.Join(os.TempDir(), "iot-master.sock")) + "]"
+		//config.MQTT.Url = "unix://" + url.PathEscape(filepath.Join(os.TempDir(), "iot-master.sock"))
 		return Store(filename)
 		//return nil
 	} else {

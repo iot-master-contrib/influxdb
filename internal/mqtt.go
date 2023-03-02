@@ -5,7 +5,6 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/zgwit/iot-master/v3/model"
-	"log"
 	"strings"
 	"time"
 )
@@ -23,7 +22,10 @@ func OpenMQTT() error {
 	client := mqtt.NewClient(opts)
 	token := client.Connect()
 	token.Wait()
-	log.Println(token.Error())
+	err := token.Error()
+	if err != nil {
+		return err
+	}
 
 	//TODO 使用iot-master model.Service
 	payload, _ := json.Marshal(config.Apps)
@@ -43,7 +45,13 @@ func OpenMQTT() error {
 		}
 
 		//解析设备数据
-		tm := time.UnixMilli(prop.Timestamp)
+		//tm := time.UnixMilli(prop.Timestamp)
+		var tm time.Time
+		if prop.Timestamp > 0 {
+			tm = time.UnixMilli(prop.Timestamp)
+		} else {
+			tm = time.Now()
+		}
 		if prop.Properties != nil {
 			for _, v := range prop.Properties {
 				ts := tm
@@ -79,7 +87,7 @@ func OpenMQTT() error {
 		}
 
 		//写入
-		writeApi.Flush()
+		//writeApi.Flush()
 	})
 
 	return nil
