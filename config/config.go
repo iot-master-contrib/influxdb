@@ -1,30 +1,28 @@
-package internal
+package config
 
 import (
+	"github.com/iot-master-contribe/influxdb/influx"
 	"github.com/zgwit/iot-master/v3/model"
+	"github.com/zgwit/iot-master/v3/pkg/log"
+	"github.com/zgwit/iot-master/v3/pkg/mqtt"
 	"gopkg.in/yaml.v2"
-	"log"
 	"os"
 	"runtime"
 )
 
-var config = Config{
+var Config = Configure{
 	Web: Web{
 		Addr: ":60001",
 	},
-	MQTT: MQTT{
-		Url:      "unix://iot-master.sock", //开发时，改为:1843 方便调试
-		ClientId: "iot-master-influxdb",
-		Username: "",
-		Password: "",
-	},
+	MQTT: mqtt.Default(),
+	Log:  log.Default(),
 	Apps: []model.App{
 		{
 			Id:      "influx",
-			Name:    "Influxdb",
+			Name:    "InfluxDB",
 			Address: "http://localhost:60001",
 			Entries: []model.AppEntry{
-				{Name: "配置", Path: "/config"},
+				{Name: "配置", Path: "config"},
 			},
 		},
 		{
@@ -35,40 +33,26 @@ var config = Config{
 	},
 }
 
-type Config struct {
-	Web      Web         `yaml:"web"`
-	MQTT     MQTT        `yaml:"mqtt"`
-	Influxdb Influxdb    `yaml:"influxdb"`
-	Apps     []model.App `yaml:"apps"`
+type Configure struct {
+	Web      Web            `json:"web"`
+	MQTT     mqtt.Options   `json:"mqtt"`
+	Log      log.Options    `json:"log"`
+	Influxdb influx.Options `json:"influxdb"`
+	Apps     []model.App    `json:"apps"`
 }
 
 type Web struct {
 	Addr string `yaml:"addr"`
 }
 
-type MQTT struct {
-	Url      string `yaml:"url"`
-	ClientId string `yaml:"client_id"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-}
-
-type Influxdb struct {
-	Url         string `yaml:"url"`
-	Org         string `yaml:"org"`
-	Bucket      string `yaml:"bucket"`
-	Token       string `yaml:"token"`
-	Measurement string `yaml:"measurement"`
-}
-
 // Load 加载
 func Load(filename string) error {
 	// 如果没有文件，则使用默认信息创建
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
-		//config.MQTT.Url = "unix://[" + url.PathEscape(filepath.Join(os.TempDir(), "iot-master.sock")) + "]"
-		//config.MQTT.Url = "unix://" + url.PathEscape(filepath.Join(os.TempDir(), "iot-master.sock"))
+		//Config.MQTT.Url = "unix://[" + url.PathEscape(filepath.Join(os.TempDir(), "iot-master.sock")) + "]"
+		//Config.MQTT.Url = "unix://" + url.PathEscape(filepath.Join(os.TempDir(), "iot-master.sock"))
 		if runtime.GOOS == "windows" {
-			config.MQTT.Url = ":1843"
+			Config.MQTT.Url = ":1843"
 		}
 		return Store(filename)
 		//return nil
@@ -81,7 +65,7 @@ func Load(filename string) error {
 		defer y.Close()
 
 		d := yaml.NewDecoder(y)
-		err = d.Decode(&config)
+		err = d.Decode(&Config)
 		if err != nil {
 			log.Fatal(err)
 			return err
@@ -102,7 +86,7 @@ func Store(filename string) error {
 	e := yaml.NewEncoder(y)
 	defer e.Close()
 
-	err = e.Encode(&config)
+	err = e.Encode(&Config)
 	if err != nil {
 		log.Fatal(err)
 		return err

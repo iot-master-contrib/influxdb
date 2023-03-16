@@ -1,4 +1,4 @@
-package internal
+package influx
 
 import (
 	"context"
@@ -8,27 +8,33 @@ import (
 	"time"
 )
 
-var writeApi api.WriteAPI
-var queryApi api.QueryAPI
+var Writer api.WriteAPI
+var Reader api.QueryAPI
 
 type Point struct {
 	Value interface{} `json:"value"`
 	Time  time.Time   `json:"time"`
 }
 
-func OpenInfluxdb() {
-	client := influxdb2.NewClient(config.Influxdb.Url, config.Influxdb.Token)
-	writeApi = client.WriteAPI(config.Influxdb.Org, config.Influxdb.Bucket)
-	queryApi = client.QueryAPI(config.Influxdb.Org)
+var bucket string
+var client influxdb2.Client
+
+func Open(cfg Options) {
+	client = influxdb2.NewClient(cfg.Url, cfg.Token)
+	Writer = client.WriteAPI(cfg.Org, cfg.Bucket)
+	Reader = client.QueryAPI(cfg.Org)
+	bucket = cfg.Bucket
+}
+
+func Close() {
+	client.Close()
 }
 
 func Insert(measurement, id string, fields map[string]interface{}, ts time.Time) {
-	writeApi.WritePoint(write.NewPoint(measurement, map[string]string{"id": id}, fields, ts))
+	Writer.WritePoint(write.NewPoint(measurement, map[string]string{"id": id}, fields, ts))
 }
 
 func Query(measurement, id, field, start, end, window, fn string) ([]Point, error) {
-	bucket := config.Influxdb.Bucket
-
 	flux := "from(bucket: \"" + bucket + "\")\n"
 	flux += "|> range(start: " + start + ", stop: " + end + ")\n"
 	flux += "|> filter(fn: (r) => r[\"_measurement\"] == \"" + measurement + "\")\n"
@@ -37,7 +43,7 @@ func Query(measurement, id, field, start, end, window, fn string) ([]Point, erro
 	flux += "|> aggregateWindow(every: " + window + ", fn: " + fn + ", createEmpty: false)\n"
 	flux += "|> yield(name: \"" + fn + "\")"
 
-	result, err := queryApi.Query(context.Background(), flux)
+	result, err := Reader.Query(context.Background(), flux)
 	if err != nil {
 		return nil, err
 	}

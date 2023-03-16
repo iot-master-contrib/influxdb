@@ -2,6 +2,8 @@ package internal
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/iot-master-contribe/influxdb/config"
+	"github.com/iot-master-contribe/influxdb/influx"
 	"log"
 	"net/http"
 )
@@ -39,7 +41,7 @@ func OpenWeb() {
 		window := ctx.DefaultQuery("window", "10m")
 		fn := ctx.DefaultQuery("fn", "mean") //last
 
-		values, err := Query(pid, id, key, start, end, window, fn)
+		values, err := influx.Query(pid, id, key, start, end, window, fn)
 		if err != nil {
 			replyError(ctx, err)
 			return
@@ -48,9 +50,9 @@ func OpenWeb() {
 		replyOk(ctx, values)
 	})
 
-	log.Println("Web服务启动", config.Web)
+	log.Println("Web服务启动", config.Config.Web)
 	server := &http.Server{
-		Addr:    config.Web.Addr,
+		Addr:    config.Config.Web.Addr,
 		Handler: app,
 	}
 
