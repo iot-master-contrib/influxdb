@@ -8,7 +8,7 @@ import (
 
 func queryRouter(app *gin.RouterGroup) {
 
-	app.GET("/:pid/:id/:name", func(ctx *gin.Context) {
+	app.GET("/query/:pid/:id/:name", func(ctx *gin.Context) {
 		pid := ctx.Param("pid")
 		id := ctx.Param("id")
 		key := ctx.Param("name")
@@ -27,7 +27,7 @@ func queryRouter(app *gin.RouterGroup) {
 		curd.OK(ctx, values)
 	})
 
-	app.GET("/:pid/:id/:name/rate", func(ctx *gin.Context) {
+	app.GET("/rate/:pid/:id/:name", func(ctx *gin.Context) {
 		pid := ctx.Param("pid")
 		id := ctx.Param("id")
 		key := ctx.Param("name")
