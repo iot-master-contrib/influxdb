@@ -8,7 +8,7 @@ import (
 	"github.com/zgwit/iot-master/v3/pkg/curd"
 )
 
-func queryRouter(app *gin.RouterGroup) {
+func rateRouter(app *gin.RouterGroup) {
 
 	app.GET("/:pid/:id/:name", func(ctx *gin.Context) {
 		pid := ctx.Param("pid")
@@ -18,9 +18,8 @@ func queryRouter(app *gin.RouterGroup) {
 		start := ctx.DefaultQuery("start", "-5h")
 		end := ctx.DefaultQuery("end", "0h")
 		window := ctx.DefaultQuery("window", "10m")
-		fn := ctx.DefaultQuery("fn", "mean") //last
 
-		values, err := influx.Query(pid, id, key, start, end, window, fn)
+		values, err := influx.Rate(pid, id, key, start, end, window)
 		if err != nil {
 			curd.Error(ctx, err)
 			return
@@ -37,9 +36,8 @@ func queryRouter(app *gin.RouterGroup) {
 		start := ctx.DefaultQuery("start", "-5h")
 		end := ctx.DefaultQuery("end", "0h")
 		window := ctx.DefaultQuery("window", "10m")
-		fn := ctx.DefaultQuery("fn", "mean") //last
 
-		values, err := influx.Query(pid, id, key, start, end, window, fn)
+		values, err := influx.Rate(pid, id, key, start, end, window)
 		if err != nil {
 			curd.Error(ctx, err)
 			return
