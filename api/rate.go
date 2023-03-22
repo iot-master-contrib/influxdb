@@ -8,6 +8,38 @@ import (
 	"github.com/zgwit/iot-master/v3/pkg/curd"
 )
 
+// @Summary 查询历史数据增长
+// @Schemes
+// @Description 查询历史数据增长
+// @Tags rate
+// @Param pid path string true "产品ID"
+// @Param id path string true "设备ID"
+// @Param name path string true "变量名称"
+// @Param start query string false "起始时间"
+// @Param end query string false "结束时间"
+// @Param window query string false "窗口时间"
+// @Param fn query string false "算法"
+// @Produce json
+// @Success 200 {object} ReplyData[[]influx.Point] 返回报警信息
+// @Router /rate/{pid}/{id}/{name} [get]
+func noopRate() {}
+
+// @Summary 导出历史数据增长
+// @Schemes
+// @Description 导出历史数据增长
+// @Tags rate
+// @Param pid path string true "产品ID"
+// @Param id path string true "设备ID"
+// @Param name path string true "变量名称"
+// @Param start query string false "起始时间"
+// @Param end query string false "结束时间"
+// @Param window query string false "窗口时间"
+// @Param fn query string false "算法"
+// @Produce json
+// @Success 200 {object} ReplyData[[]influx.Point] 返回报警信息
+// @Router /rate/{pid}/{id}/{name}/export [get]
+func noopRateExport() {}
+
 func rateRouter(app *gin.RouterGroup) {
 
 	app.GET("/:pid/:id/:name", func(ctx *gin.Context) {
@@ -28,7 +60,7 @@ func rateRouter(app *gin.RouterGroup) {
 		curd.OK(ctx, values)
 	})
 
-	app.GET("/:pid/:id/:name/excel", func(ctx *gin.Context) {
+	app.GET("/:pid/:id/:name/export", func(ctx *gin.Context) {
 		pid := ctx.Param("pid")
 		id := ctx.Param("id")
 		key := ctx.Param("name")

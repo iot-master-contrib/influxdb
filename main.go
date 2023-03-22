@@ -12,6 +12,11 @@ import (
 	"strings"
 )
 
+// @title 历史数据库接口文档
+// @version 1.0 版本
+// @description API文档
+// @BasePath /app/history/api/
+// @query.collection.format multi
 func main() {
 	app, _ := filepath.Abs(os.Args[0])
 	ext := filepath.Ext(os.Args[0])
