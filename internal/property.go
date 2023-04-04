@@ -12,6 +12,27 @@ import (
 func SubscribeProperty(client mqtt.Client) {
 	//订阅消息
 	client.Subscribe("up/property/+/+", 0, func(client mqtt.Client, message mqtt.Message) {
+		topics := strings.Split(message.Topic(), "/")
+		pid := topics[2]
+		id := topics[3]
+
+		var properties map[string]interface{}
+		err := json.Unmarshal(message.Payload(), &properties)
+		if err != nil {
+			//log
+			return
+		}
+
+		tm := time.Now()
+		influx.Insert(pid, id, properties, tm)
+		//写入
+		//writeApi.Flush()
+	})
+}
+
+func SubscribePropertyOld(client mqtt.Client) {
+	//订阅消息
+	client.Subscribe("up/property/+/+", 0, func(client mqtt.Client, message mqtt.Message) {
 		names := strings.Split(message.Topic(), "/")
 		pid := names[2]
 		//id := names[3]
