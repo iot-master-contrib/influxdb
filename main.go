@@ -18,7 +18,7 @@ import (
 	"strings"
 )
 
-//go:embed all:app/history
+//go:embed all:app/influx
 var wwwFiles embed.FS
 
 func getConfigureName() string {
@@ -30,12 +30,12 @@ func getConfigureName() string {
 // @title 历史数据库接口文档
 // @version 1.0 版本
 // @description API文档
-// @BasePath /app/history/api/
+// @BasePath /app/influx/api/
 // @query.collection.format multi
 func main() {
 	banner.Print()
 	build.Print()
-	
+
 	cfg := getConfigureName()
 	err := config.Load(cfg)
 	if err != nil {

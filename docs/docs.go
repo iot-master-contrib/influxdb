@@ -315,7 +315,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0 版本",
 	Host:             "",
-	BasePath:         "/app/history/api/",
+	BasePath:         "/app/influx/api/",
 	Schemes:          []string{},
 	Title:            "历史数据库接口文档",
 	Description:      "API文档",
