@@ -33,7 +33,7 @@ func getConfigureName() string {
 // @BasePath /app/influx/api/
 // @query.collection.format multi
 func main() {
-	banner.Print()
+	banner.Print("iot-master-plugin:influxdb")
 	build.Print()
 
 	cfg := getConfigureName()
