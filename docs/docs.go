@@ -15,6 +15,61 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/config/influxdb": {
+            "get": {
+                "description": "查询WEB配置",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "config"
+                ],
+                "summary": "查询WEB配置",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.ReplyData-influx_Options"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "修改WEB配置",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "config"
+                ],
+                "summary": "修改WEB配置",
+                "parameters": [
+                    {
+                        "description": "WEB配置",
+                        "name": "cfg",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/influx.Options"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/api.ReplyData-int"
+                        }
+                    }
+                }
+            }
+        },
         "/query/{pid}/{id}/{name}": {
             "get": {
                 "description": "查询历史数据",
@@ -295,6 +350,45 @@ const docTemplate = `{
                     }
                 },
                 "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.ReplyData-influx_Options": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/influx.Options"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.ReplyData-int": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "integer"
+                },
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "influx.Options": {
+            "type": "object",
+            "properties": {
+                "bucket": {
+                    "type": "string"
+                },
+                "org": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "url": {
                     "type": "string"
                 }
             }

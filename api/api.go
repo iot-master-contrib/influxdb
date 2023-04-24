@@ -8,4 +8,5 @@ func RegisterRoutes(app *gin.RouterGroup) {
 
 	rateRouter(app.Group("/rate"))
 
+	configRouter(app.Group("/config"))
 }

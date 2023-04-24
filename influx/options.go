@@ -17,7 +17,7 @@ func Default() Options {
 }
 
 var options Options = Default()
-var configure = config.AppName() + ".yaml"
+var configure = config.AppName() + ".influxdb.yaml"
 
 const ENV = "IOT_MASTER_INFLUXDB_"
 

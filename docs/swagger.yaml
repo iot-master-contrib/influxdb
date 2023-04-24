@@ -1,4 +1,4 @@
-basePath: /app/history/api/
+basePath: /app/influx/api/
 definitions:
   api.ReplyData-array_influx_Point:
     properties:
@@ -7,6 +7,31 @@ definitions:
           $ref: '#/definitions/influx.Point'
         type: array
       error:
+        type: string
+    type: object
+  api.ReplyData-influx_Options:
+    properties:
+      data:
+        $ref: '#/definitions/influx.Options'
+      error:
+        type: string
+    type: object
+  api.ReplyData-int:
+    properties:
+      data:
+        type: integer
+      error:
+        type: string
+    type: object
+  influx.Options:
+    properties:
+      bucket:
+        type: string
+      org:
+        type: string
+      token:
+        type: string
+      url:
         type: string
     type: object
   influx.Point:
@@ -21,6 +46,42 @@ info:
   title: 历史数据库接口文档
   version: 1.0 版本
 paths:
+  /config/influxdb:
+    get:
+      consumes:
+      - application/json
+      description: 查询WEB配置
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.ReplyData-influx_Options'
+      summary: 查询WEB配置
+      tags:
+      - config
+    post:
+      consumes:
+      - application/json
+      description: 修改WEB配置
+      parameters:
+      - description: WEB配置
+        in: body
+        name: cfg
+        required: true
+        schema:
+          $ref: '#/definitions/influx.Options'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.ReplyData-int'
+      summary: 修改WEB配置
+      tags:
+      - config
   /query/{pid}/{id}/{name}:
     get:
       description: 查询历史数据
