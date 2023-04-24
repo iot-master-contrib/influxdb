@@ -19,11 +19,11 @@ type Point struct {
 var bucket string
 var client influxdb2.Client
 
-func Open(cfg Options) {
-	client = influxdb2.NewClient(cfg.Url, cfg.Token)
-	Writer = client.WriteAPI(cfg.Org, cfg.Bucket)
-	Reader = client.QueryAPI(cfg.Org)
-	bucket = cfg.Bucket
+func Open() {
+	client = influxdb2.NewClient(options.Url, options.Token)
+	Writer = client.WriteAPI(options.Org, options.Bucket)
+	Reader = client.QueryAPI(options.Org)
+	bucket = options.Bucket
 }
 
 func Close() {

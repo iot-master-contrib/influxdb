@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/iot-master-contribe/influxdb/influx"
-	"github.com/zgwit/iot-master/v3/model"
+	"github.com/zgwit/iot-master/v3/payload"
 	"strings"
 	"time"
 )
@@ -37,7 +37,7 @@ func SubscribePropertyOld(client mqtt.Client) {
 		pid := names[2]
 		//id := names[3]
 
-		var prop model.PayloadPropertyUp
+		var prop payload.DevicePropertyUp
 		err := json.Unmarshal(message.Payload(), &prop)
 		if err != nil {
 			//log
@@ -58,8 +58,8 @@ func SubscribePropertyOld(client mqtt.Client) {
 				ts := tm
 				if v.Timestamp > 0 {
 					ts = time.UnixMilli(v.Timestamp)
-				} else if !v.Time.IsZero() {
-					ts = v.Time
+					//} else if !v.Time.IsZero() {
+					ts = time.Time(v.Time)
 				}
 				fields := map[string]any{v.Name: v.Value}
 				influx.Insert(pid, prop.Id, fields, ts)
@@ -72,15 +72,15 @@ func SubscribePropertyOld(client mqtt.Client) {
 				ts := tm
 				if dev.Timestamp > 0 {
 					ts = time.UnixMilli(dev.Timestamp)
-				} else if !dev.Time.IsZero() {
-					ts = dev.Time
+					//} else if !dev.Time.IsZero() {
+					ts = time.Time(dev.Time)
 				}
 				for _, v := range prop.Properties {
 					tss := ts
 					if v.Timestamp > 0 {
 						tss = time.UnixMilli(v.Timestamp)
-					} else if !v.Time.IsZero() {
-						tss = v.Time
+						//} else if !v.Time.IsZero() {
+						tss = time.Time(v.Time)
 					}
 					fields := map[string]any{v.Name: v.Value}
 					influx.Insert(pid, prop.Id, fields, tss)

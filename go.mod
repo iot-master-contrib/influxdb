@@ -6,10 +6,9 @@ require (
 	github.com/eclipse/paho.mqtt.golang v1.4.2
 	github.com/gin-gonic/gin v1.9.0
 	github.com/influxdata/influxdb-client-go/v2 v2.12.3
-	github.com/swaggo/swag v1.8.12
+	github.com/swaggo/swag v1.16.1
 	github.com/xuri/excelize/v2 v2.7.1
-	github.com/zgwit/iot-master/v3 v3.0.5
-	gopkg.in/yaml.v2 v2.4.0
+	github.com/zgwit/iot-master/v3 v3.1.0
 )
 
 require (
@@ -67,7 +66,6 @@ require (
 	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/tools v0.8.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
-	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	xorm.io/builder v0.3.12 // indirect
 	xorm.io/xorm v1.3.2 // indirect
