@@ -7,11 +7,7 @@ go env -w GOSUMDB=off
 app="influxdb"
 version="1.0.0"
 
-read -t 5 -p "please input version(default:$version)" ver
-if [ -n "${ver}" ];then
-	version=$ver
-fi
-
+#npm run build
 
 pkg="github.com/zgwit/iot-master/v3/pkg/build"
 gitHash=$(git show -s --format=%H)

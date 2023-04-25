@@ -16,3 +16,4 @@
 /.idea
 /*.yaml
 /influxdb
+/package-lock.json
