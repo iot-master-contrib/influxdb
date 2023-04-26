@@ -1,0 +1,48 @@
+<ng-template #extra>
+
+    <button nz-button nzType="primary" (click)="submit()">
+      <i nz-icon nzType="save" nzTheme="outline"></i>
+      保存
+    </button>
+  </ng-template>
+  
+  <nz-card nzTitle="数据库" [nzExtra]="extra">
+  
+    <form nz-form [formGroup]="group" (ngSubmit)="submit()">
+     
+    
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="org">组织</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+          <input nz-input name="org"   formControlName="org"/> 
+        </nz-form-control>
+      </nz-form-item>
+  
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24"  nzFor="bucket"  >存储空间</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"     >  
+            <input   nz-input name="bucket"   formControlName="bucket"/> 
+        </nz-form-control>
+      </nz-form-item>
+  
+
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="token">令牌</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"  >
+          <input nz-input name="token"   formControlName="token"/> 
+        </nz-form-control>
+      </nz-form-item>
+
+
+  
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24"  nzFor="url"  >地址</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24"    >  
+            <input nz-input name="url"   formControlName="url"/> 
+        </nz-form-control>
+      </nz-form-item>
+   
+    </form>
+  </nz-card>
+  
