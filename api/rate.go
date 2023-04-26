@@ -3,9 +3,9 @@ package api
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/iot-master-contribe/influxdb/influx"
 	"github.com/xuri/excelize/v2"
 	"github.com/zgwit/iot-master/v3/pkg/curd"
+	"influxdb/influx"
 )
 
 // @Summary 查询历史数据增长

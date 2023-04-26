@@ -3,16 +3,17 @@ package main
 import (
 	"embed"
 	"encoding/json"
-	"github.com/iot-master-contribe/influxdb/api"
-	"github.com/iot-master-contribe/influxdb/config"
-	"github.com/iot-master-contribe/influxdb/influx"
-	"github.com/iot-master-contribe/influxdb/internal"
 	"github.com/zgwit/iot-master/v3/model"
 	"github.com/zgwit/iot-master/v3/pkg/banner"
 	"github.com/zgwit/iot-master/v3/pkg/build"
 	"github.com/zgwit/iot-master/v3/pkg/log"
 	"github.com/zgwit/iot-master/v3/pkg/mqtt"
 	"github.com/zgwit/iot-master/v3/pkg/web"
+	"influxdb/api"
+	"influxdb/config"
+	_ "influxdb/docs"
+	"influxdb/influx"
+	"influxdb/internal"
 	"net/http"
 )
 

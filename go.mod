@@ -1,4 +1,4 @@
-module github.com/iot-master-contribe/influxdb
+module influxdb
 
 go 1.18
 

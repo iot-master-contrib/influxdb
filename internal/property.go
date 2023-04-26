@@ -3,8 +3,8 @@ package internal
 import (
 	"encoding/json"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
-	"github.com/iot-master-contribe/influxdb/influx"
 	"github.com/zgwit/iot-master/v3/payload"
+	"influxdb/influx"
 	"strings"
 	"time"
 )

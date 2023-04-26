@@ -2,27 +2,27 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/iot-master-contribe/influxdb/influx"
 	"github.com/zgwit/iot-master/v3/pkg/curd"
+	"influxdb/influx"
 )
 
-// @Summary 查询WEB配置
+// @Summary 查询数据库配置
 // @Schemes
-// @Description 查询WEB配置
+// @Description 查询数据库配置
 // @Tags config
 // @Accept json
 // @Produce json
-// @Success 200 {object} ReplyData[influx.Options] 返回WEB配置
+// @Success 200 {object} ReplyData[influx.Options] 返回数据库配置
 // @Router /config/influxdb [get]
 func configGetInfluxdb(ctx *gin.Context) {
 	curd.OK(ctx, influx.GetOptions())
 }
 
-// @Summary 修改WEB配置
+// @Summary 修改数据库配置
 // @Schemes
-// @Description 修改WEB配置
+// @Description 修改数据库配置
 // @Tags config
-// @Param cfg body influx.Options true "WEB配置"
+// @Param cfg body influx.Options true "数据库配置"
 // @Accept json
 // @Produce json
 // @Success 200 {object} ReplyData[int]
