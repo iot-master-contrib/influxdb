@@ -1,10 +1,10 @@
 package config
 
 import (
-	"github.com/iot-master-contribe/influxdb/influx"
 	"github.com/zgwit/iot-master/v3/pkg/log"
 	"github.com/zgwit/iot-master/v3/pkg/mqtt"
 	"github.com/zgwit/iot-master/v3/pkg/web"
+	"influxdb/influx"
 )
 
 func Load() {
