@@ -17,6 +17,7 @@ import * as dayjs from 'dayjs';
   providers: [DatePipe],
 })
 export class HistoryComponent {
+  chart:any;
   validateForm!: FormGroup;
   href!: string;
   option: any = {};
@@ -104,7 +105,7 @@ export class HistoryComponent {
   }
  
    
-  chartInit(ec:any){}
+  chartInit(ec:any){ this.chart=ec}
 
 
   search() {
@@ -126,6 +127,8 @@ export class HistoryComponent {
         .subscribe((res) => {
           this.searchData = res.data;
           this.searchTotal = res.total;
+          //图表渲染 
+         // this.chart.setOption(this.option);
         })
         .add(() => {
           this.loading = false;
