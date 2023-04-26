@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/config/influxdb": {
             "get": {
-                "description": "查询WEB配置",
+                "description": "查询数据库配置",
                 "consumes": [
                     "application/json"
                 ],
@@ -27,7 +27,7 @@ const docTemplate = `{
                 "tags": [
                     "config"
                 ],
-                "summary": "查询WEB配置",
+                "summary": "查询数据库配置",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -38,7 +38,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "修改WEB配置",
+                "description": "修改数据库配置",
                 "consumes": [
                     "application/json"
                 ],
@@ -48,10 +48,10 @@ const docTemplate = `{
                 "tags": [
                     "config"
                 ],
-                "summary": "修改WEB配置",
+                "summary": "修改数据库配置",
                 "parameters": [
                     {
-                        "description": "WEB配置",
+                        "description": "数据库配置",
                         "name": "cfg",
                         "in": "body",
                         "required": true,
