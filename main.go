@@ -1,28 +1,28 @@
 package influxdb
 
 import (
-  "embed"
-  "encoding/json"
-  "github.com/iot-master-contrib/influxdb/api"
-  _ "github.com/iot-master-contrib/influxdb/docs"
-  "github.com/iot-master-contrib/influxdb/internal"
-  "github.com/zgwit/iot-master/v3/model"
-  "github.com/zgwit/iot-master/v3/pkg/mqtt"
-  "github.com/zgwit/iot-master/v3/pkg/web"
-  "net/http"
+	"embed"
+	"encoding/json"
+	"github.com/iot-master-contrib/influxdb/api"
+	_ "github.com/iot-master-contrib/influxdb/docs"
+	"github.com/iot-master-contrib/influxdb/internal"
+	"github.com/zgwit/iot-master/v3/model"
+	"github.com/zgwit/iot-master/v3/pkg/mqtt"
+	"github.com/zgwit/iot-master/v3/pkg/web"
+	"net/http"
 )
 
 func App() *model.App {
-  return &model.App{
-    Id:   "influxdb",
-    Name: "Influxdb",
-    Entries: []model.AppEntry{{
-      Path: "app/influxdb/influxdb",
-      Name: "Influxdb",
-    }},
-    Type:    "tcp",
-    Address: "http://localhost" + web.GetOptions().Addr,
-  }
+	return &model.App{
+		Id:   "influxdb",
+		Name: "Influxdb",
+		Entries: []model.AppEntry{{
+			Path: "app/influxdb/influxdb",
+			Name: "Influxdb",
+		}},
+		Type:    "tcp",
+		Address: "http://localhost" + web.GetOptions().Addr,
+	}
 }
 
 //go:embed all:app/influxdb
@@ -37,30 +37,30 @@ func main() {
 }
 
 func Startup(app *web.Engine) error {
-  internal.SubscribeProperty(mqtt.Client)
+	internal.SubscribeProperty(mqtt.Client)
 
-  //注册前端接口
-  api.RegisterRoutes(app.Group("/app/influxdb/api"))
+	//注册前端接口
+	api.RegisterRoutes(app.Group("/app/influxdb/api"))
 
-  //注册接口文档
-  web.RegisterSwaggerDocs(app.Group("/app/influxdb"), "influxdb")
+	//注册接口文档
+	web.RegisterSwaggerDocs(app.Group("/app/influxdb"), "influxdb")
 
-  return nil
+	return nil
 }
 
 func Register() error {
-  payload, _ := json.Marshal(App())
-  return mqtt.Publish("master/register", payload, false, 0)
+	payload, _ := json.Marshal(App())
+	return mqtt.Publish("master/register", payload, false, 0)
 }
 
 func Static(fs *web.FileSystem) {
-  //前端静态文件
-  fs.Put("/app/history", http.FS(wwwFiles), "", "app/history/index.html")
+	//前端静态文件
+	fs.Put("/app/influxdb", http.FS(wwwFiles), "", "app/influxdb/index.html")
 }
 
 func Shutdown() error {
 
-  //只关闭Web就行了，其他通过defer关闭
+	//只关闭Web就行了，其他通过defer关闭
 
-  return nil
+	return nil
 }
