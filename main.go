@@ -1,76 +1,66 @@
-package main
+package influxdb
 
 import (
-	"embed"
-	"encoding/json"
-	"github.com/zgwit/iot-master/v3/model"
-	"github.com/zgwit/iot-master/v3/pkg/banner"
-	"github.com/zgwit/iot-master/v3/pkg/build"
-	"github.com/zgwit/iot-master/v3/pkg/log"
-	"github.com/zgwit/iot-master/v3/pkg/mqtt"
-	"github.com/zgwit/iot-master/v3/pkg/web"
-	"influxdb/api"
-	"influxdb/config"
-	_ "influxdb/docs"
-	"influxdb/influx"
-	"influxdb/internal"
-	"net/http"
+  "embed"
+  "encoding/json"
+  "github.com/iot-master-contrib/influxdb/api"
+  _ "github.com/iot-master-contrib/influxdb/docs"
+  "github.com/iot-master-contrib/influxdb/internal"
+  "github.com/zgwit/iot-master/v3/model"
+  "github.com/zgwit/iot-master/v3/pkg/mqtt"
+  "github.com/zgwit/iot-master/v3/pkg/web"
+  "net/http"
 )
 
-//go:embed all:app/influx
+func App() *model.App {
+  return &model.App{
+    Id:   "influxdb",
+    Name: "Influxdb",
+    Entries: []model.AppEntry{{
+      Path: "app/influxdb/influxdb",
+      Name: "Influxdb",
+    }},
+    Type:    "tcp",
+    Address: "http://localhost" + web.GetOptions().Addr,
+  }
+}
+
+//go:embed all:app/influxdb
 var wwwFiles embed.FS
 
 // @title 历史数据库接口文档
 // @version 1.0 版本
 // @description API文档
-// @BasePath /app/influx/api/
+// @BasePath /app/influxdb/api/
 // @query.collection.format multi
 func main() {
-	banner.Print("iot-master-plugin:influx")
-	build.Print()
+}
 
-	config.Load()
+func Startup(app *web.Engine) error {
+  internal.SubscribeProperty(mqtt.Client)
 
-	err := log.Open()
-	if err != nil {
-		log.Fatal(err)
-	}
+  //注册前端接口
+  api.RegisterRoutes(app.Group("/app/influxdb/api"))
 
-	influx.Open()
+  //注册接口文档
+  web.RegisterSwaggerDocs(app.Group("/app/influxdb"), "influxdb")
 
-	//MQTT总线
-	err = mqtt.Open()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer mqtt.Close()
+  return nil
+}
 
-	//注册应用
-	payload, _ := json.Marshal(model.App{
-		Id:   "influx",
-		Name: "Influxdb",
-		Entries: []model.AppEntry{{
-			Path: "app/influx/influx",
-			Name: "Influxdb",
-		}},
-		Type:    "tcp",
-		Address: "http://localhost" + web.GetOptions().Addr,
-	})
-	_ = mqtt.Publish("master/register", payload, false, 0)
+func Register() error {
+  payload, _ := json.Marshal(App())
+  return mqtt.Publish("master/register", payload, false, 0)
+}
 
-	internal.SubscribeProperty(mqtt.Client)
+func Static(fs *web.FileSystem) {
+  //前端静态文件
+  fs.Put("/app/history", http.FS(wwwFiles), "", "app/history/index.html")
+}
 
-	app := web.CreateEngine()
+func Shutdown() error {
 
-	//注册前端接口
-	api.RegisterRoutes(app.Group("/app/influx/api"))
+  //只关闭Web就行了，其他通过defer关闭
 
-	//注册接口文档
-	web.RegisterSwaggerDocs(app.Group("/app/influx"))
-
-	//前端静态文件
-	app.RegisterFS(http.FS(wwwFiles), "", "app/influx/index.html")
-
-	//监听HTTP
-	app.Serve()
+  return nil
 }

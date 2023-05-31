@@ -2,8 +2,8 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/iot-master-contrib/influxdb/influx"
 	"github.com/zgwit/iot-master/v3/pkg/curd"
-	"influxdb/influx"
 )
 
 // @Summary 查询数据库配置

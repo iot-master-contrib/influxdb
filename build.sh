@@ -7,7 +7,8 @@ go env -w GOSUMDB=off
 app="influxdb"
 version="1.0.0"
 
-#npm run build
+npm run build
+
 
 pkg="github.com/zgwit/iot-master/v3/pkg/build"
 gitHash=$(git show -s --format=%H)
@@ -22,7 +23,7 @@ ldflags="-X '${pkg}.Version=$version' \
 export GOARCH=amd64
 
 export GOOS=windows
-go build -ldflags "$ldflags" -o influxdb.exe main.go
+go build -ldflags "$ldflags" -o influxdb.exe cmd/main.go
 
 export GOOS=linux
-go build -ldflags "$ldflags" -o influxdb main.go
+go build -ldflags "$ldflags" -o influxdb cmd/main.go
