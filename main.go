@@ -16,6 +16,7 @@ func App() *model.App {
 	return &model.App{
 		Id:   "influxdb",
 		Name: "InfluxDB",
+		Icon: "/app/influxdb/assets/influxdb.svg",
 		Entries: []model.AppEntry{{
 			Path: "app/influxdb/history",
 			Name: "历史",
