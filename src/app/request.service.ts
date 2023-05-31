@@ -10,7 +10,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 })
 export class RequestService {
 
-  public base = '/app/influx/api/'; //使用ng servers proxy.config.json
+  public base = '/app/influxdb/api/'; //使用ng servers proxy.config.json
   //public base = environment.host;
 
   constructor(private http: HttpClient, private message: NzMessageService, private route: Router) {
@@ -18,7 +18,7 @@ export class RequestService {
 
   request(method: string, uri: string, options: any ): Observable<any> {
     // 携带Cookie，保持session会话
-    options.withCredentials = true; 
+    options.withCredentials = true;
     //巡检地址
     //this.base = '/api/'
    // if(search===2)this.base='/app/dadao/api/'
@@ -57,7 +57,7 @@ export class RequestService {
     return this.request('PUT', uri, {params, body});
   }
 
-  post(uri: string, body: any | null, params?: { [k: string]: any } ): Observable<any> { 
+  post(uri: string, body: any | null, params?: { [k: string]: any } ): Observable<any> {
     return this.request('POST', uri, {params, body} );
   }
 

@@ -34,8 +34,8 @@ export class SettingComponent implements OnInit {
   }
 
   load() {
-    this.rs.get(`/app/influx/api/config/influxdb`).subscribe((res) => {
-      this.dbData = res.data; 
+    this.rs.get(`/app/influxdb/api/config/influxdb`).subscribe((res) => {
+      this.dbData = res.data;
       this.group.patchValue({
         bucket: res.data.Bucket,
         org: res.data.Org,
@@ -59,7 +59,7 @@ export class SettingComponent implements OnInit {
     if (this.group.valid) {
       this.group.patchValue({ LogLevel: Number(this.group.value.LogLevel) });
       this.rs
-        .post(`/app/influx/api/config/influxdb`, this.group.value)
+        .post(`/app/influxdb/api/config/influxdb`, this.group.value)
         .subscribe((res) => {
           this.msg.success('保存成功');
         });

@@ -15,10 +15,13 @@ import (
 func App() *model.App {
 	return &model.App{
 		Id:   "influxdb",
-		Name: "Influxdb",
+		Name: "InfluxDB",
 		Entries: []model.AppEntry{{
-			Path: "app/influxdb/influxdb",
-			Name: "Influxdb",
+			Path: "app/influxdb/history",
+			Name: "历史",
+		}, {
+			Path: "app/influxdb/setting",
+			Name: "配置",
 		}},
 		Type:    "tcp",
 		Address: "http://localhost" + web.GetOptions().Addr,

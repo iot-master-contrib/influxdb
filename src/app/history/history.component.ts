@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'; 
+import { Component } from '@angular/core';
 import { RequestService } from 'src/app/request.service';
 import {
   FormGroup,
@@ -7,7 +7,7 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { DatePipe } from '@angular/common'; 
+import { DatePipe } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import * as dayjs from 'dayjs';
 @Component({
@@ -103,8 +103,8 @@ export class HistoryComponent {
     };
     this.load();
   }
- 
-   
+
+
   chartInit(ec:any){ this.chart=ec}
 
 
@@ -121,13 +121,13 @@ export class HistoryComponent {
       };
       this.rs
         .get(
-          `/app/influx/api/query/${value.pid}/${value.id}/${value.name}`,
+          `/app/influxdb/api/query/${value.pid}/${value.id}/${value.name}`,
           this.query
         )
         .subscribe((res) => {
           this.searchData = res.data;
           this.searchTotal = res.total;
-          //图表渲染 
+          //图表渲染
          // this.chart.setOption(this.option);
         })
         .add(() => {
@@ -196,7 +196,7 @@ export class HistoryComponent {
     this.isVisible = true;
 
   }
-   
+
   resetForm(): void {
     //this.validateForm.reset();
     let vl = this.validateForm;
@@ -237,7 +237,7 @@ export class HistoryComponent {
       this.setOfCheckedId.delete(id);
     }
   }
-   
+
   handlePropertyChange(value: string) {
     const obj = this.properties.find((item) => item.name === value);
     this.selectPropertyObj = obj;
