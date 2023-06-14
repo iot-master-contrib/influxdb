@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/iot-master-contrib/influxdb/api"
 	_ "github.com/iot-master-contrib/influxdb/docs"
+	"github.com/iot-master-contrib/influxdb/influx"
 	"github.com/iot-master-contrib/influxdb/internal"
 	"github.com/zgwit/iot-master/v3/model"
 	"github.com/zgwit/iot-master/v3/pkg/mqtt"
@@ -41,6 +42,8 @@ func main() {
 }
 
 func Startup(app *web.Engine) error {
+	influx.Open()
+
 	internal.SubscribeProperty(mqtt.Client)
 
 	//注册前端接口
