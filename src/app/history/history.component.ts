@@ -97,7 +97,7 @@ export class HistoryComponent {
           smooth: true,
           symbol: 'none',
           areaStyle: {},
-          data: data,
+          data:[] //data,
         },
       ],
     };
@@ -125,8 +125,8 @@ export class HistoryComponent {
           this.query
         )
         .subscribe((res) => {
-          this.searchData = res.data;
-          this.searchTotal = res.total;
+          this.searchData = res.data||[];
+          this.searchTotal = res.total||0;
           //图表渲染
          // this.chart.setOption(this.option);
         })
