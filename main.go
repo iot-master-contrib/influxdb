@@ -44,7 +44,7 @@ func main() {
 func Startup(app *web.Engine) error {
 	influx.Open()
 
-	internal.SubscribeProperty(mqtt.Client)
+	internal.SubscribeProperty()
 
 	//注册前端接口
 	api.RegisterRoutes(app.Group("/app/influxdb/api"))
@@ -57,7 +57,9 @@ func Startup(app *web.Engine) error {
 
 func Register() error {
 	payload, _ := json.Marshal(App())
-	return mqtt.Publish("master/register", payload, false, 0)
+	token := mqtt.Publish("master/register", payload)
+	token.Wait()
+	return token.Error()
 }
 
 func Static(fs *web.FileSystem) {

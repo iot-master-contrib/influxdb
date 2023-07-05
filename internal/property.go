@@ -2,37 +2,31 @@ package internal
 
 import (
 	"encoding/json"
-	mqtt "github.com/eclipse/paho.mqtt.golang"
+	paho "github.com/eclipse/paho.mqtt.golang"
 	"github.com/iot-master-contrib/influxdb/influx"
 	"github.com/zgwit/iot-master/v3/payload"
+	"github.com/zgwit/iot-master/v3/pkg/mqtt"
 	"strings"
 	"time"
 )
 
-func SubscribeProperty(client mqtt.Client) {
+func SubscribeProperty() {
 	//订阅消息
-	client.Subscribe("up/property/+/+", 0, func(client mqtt.Client, message mqtt.Message) {
-		topics := strings.Split(message.Topic(), "/")
+	mqtt.SubscribeJson("up/property/+/+", func(topic string, values map[string]any) {
+		topics := strings.Split(topic, "/")
 		pid := topics[2]
 		id := topics[3]
 
-		var properties map[string]interface{}
-		err := json.Unmarshal(message.Payload(), &properties)
-		if err != nil {
-			//log
-			return
-		}
-
 		tm := time.Now()
-		influx.Insert(pid, id, properties, tm)
+		influx.Insert(pid, id, values, tm)
 		//写入
 		//writeApi.Flush()
 	})
 }
 
-func SubscribePropertyOld(client mqtt.Client) {
+func SubscribePropertyOld(client paho.Client) {
 	//订阅消息
-	client.Subscribe("up/property/+/+", 0, func(client mqtt.Client, message mqtt.Message) {
+	client.Subscribe("up/property/+/+", 0, func(client paho.Client, message paho.Message) {
 		names := strings.Split(message.Topic(), "/")
 		pid := names[2]
 		//id := names[3]
