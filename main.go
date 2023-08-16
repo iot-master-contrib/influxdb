@@ -18,7 +18,7 @@ func App() *model.App {
 		Id:   "influxdb",
 		Name: "InfluxDB",
 		Icon: "/app/influxdb/assets/influxdb.svg",
-		Entries: []model.AppEntry{{
+		Entries: []*model.AppEntry{{
 			Path: "app/influxdb/history",
 			Name: "历史",
 		}, {
