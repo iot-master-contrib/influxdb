@@ -33,7 +33,7 @@ func (h *Historian) Write(table, id string, timestamp int64, values map[string]a
 }
 
 func (h *Historian) Query(table, id, name, start, end, window, method string) ([]history.Point, error) {
-	flux := "from(Bucket: \"" + h.Bucket + "\")\n"
+	flux := "from(bucket: \"" + h.Bucket + "\")\n"
 	flux += "|> range(start: " + start + ", stop: " + end + ")\n"
 	flux += "|> filter(fn: (r) => r[\"_measurement\"] == \"" + table + "\")\n"
 	flux += "|> filter(fn: (r) => r[\"id\"] == \"" + id + "\")\n"
