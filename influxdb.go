@@ -1,18 +1,19 @@
 package influxdb
 
 import (
+	"github.com/iot-master-contrib/influxdb/influx"
 	"github.com/zgwit/iot-master/v4/history"
 	"github.com/zgwit/iot-master/v4/pkg/config"
 )
 
-var h *Historian
+var h *influx.Historian
 
 func Open() error {
-	h = &Historian{
-		Url:    config.GetString(MODULE, "url"),
-		Org:    config.GetString(MODULE, "org"),
-		Bucket: config.GetString(MODULE, "bucket"),
-		Token:  config.GetString(MODULE, "token"),
+	h = &influx.Historian{
+		Url:    config.GetString(influx.MODULE, "url"),
+		Org:    config.GetString(influx.MODULE, "org"),
+		Bucket: config.GetString(influx.MODULE, "bucket"),
+		Token:  config.GetString(influx.MODULE, "token"),
 	}
 
 	h.Open()

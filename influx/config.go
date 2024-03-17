@@ -1,4 +1,4 @@
-package influxdb
+package influx
 
 import (
 	"github.com/zgwit/iot-master/v4/pkg/config"
