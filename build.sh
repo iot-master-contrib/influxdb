@@ -10,7 +10,7 @@ version="1.0.0"
 npm run build
 
 
-pkg="github.com/zgwit/iot-master/v3/pkg/build"
+pkg="github.com/zgwit/iot-master/v4/pkg/build"
 gitHash=$(git show -s --format=%H)
 buildTime=$(date -d today +"%Y-%m-%d %H:%M:%S")
 
